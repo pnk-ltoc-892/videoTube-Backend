@@ -12,3 +12,6 @@
 
         -  mkdir controllers db middlewares models routes utils
 
+        - npm i -D prettier
+        - add pretitier configurations
+
