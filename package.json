@@ -2,14 +2,20 @@
   "name": "videotube",
   "version": "1.0.0",
   "description": "A backend for video streaming and viewing service like youtube",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+
+    "dev": "nodemon src/index.js"
+
   },
   "keywords": [
     "backend",
     "javascript"
   ],
   "author": "PankajSingh",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
 }
