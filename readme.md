@@ -9,3 +9,6 @@
         -  touch app.js   constants.js   index.js
         
         - npm install --save-dev nodemon (as dev dependency)
+
+        -  mkdir controllers db middlewares models routes utils
+
