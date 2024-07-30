@@ -30,5 +30,16 @@
 
     - In import statement, watch out 'extensions' .js in file names
 
+## Phase 3: 
+    - Inside app.js, create instance of express, and import it into index.js
+    - Handle DB connection Promise, the start server by listening on PORT
+
+    - Install few packages for middlewares
+    - : npm i cookie-parser cors
+    - configure these in app.js
+
+    - Creating Wrapper Utilies Functions
+        - asyncHandler, ApiError, ApiResponse
+
 
 
