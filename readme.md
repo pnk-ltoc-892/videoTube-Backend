@@ -1,25 +1,25 @@
 # Setting Up Project
 
 ## Phase 1:
-    - :npm init
-    - : git init -> git add . -> git commit -> then connect to github
+    - ###:npm init
+    - ###: git init -> git add . -> git commit -> then connect to github
     - add public -> temp -> .gitkeep (Tracking)
     - gitignore -> .env, .env.sample
     - create src folder
-    - : touch app.js   constants.js   index.js
+    - ###: touch app.js   constants.js   index.js
     
-    - : npm install --save-dev nodemon (as dev dependency)
+    - ###: npm install --save-dev nodemon (as dev dependency)
 
     -  mkdir controllers db middlewares models routes utils
 
-    - : npm i -D prettier
+    - ###: npm i -D prettier
     - add pretitier configurations
 
 ## Phase 2: Connecting Database
     - update 'env' file with db url, and 'constants' with db name
 
     - get dot env package, mongoose, express
-        - : npm i mongoose express dotenv
+        - ###: npm i mongoose express dotenv
         - configure env in main index file
         - update packagejson as:
         - "scripts": {
@@ -35,10 +35,16 @@
     - Handle DB connection Promise, the start server by listening on PORT
 
     - Install few packages for middlewares
-    - : npm i cookie-parser cors
+    - ###: npm i cookie-parser cors
     - configure these in app.js
 
     - Creating Wrapper Utilies Functions
         - asyncHandler, ApiError, ApiResponse
 
 
+## Phase 4:
+    - Creating User & Video Model
+    - install packages
+        - ###: npm i bcrypt jsonwebtoken
+    - 
+> Explore Bcrypt , JWT(Bearer-Token) , MONGODB mongoose plugins & Hooks
