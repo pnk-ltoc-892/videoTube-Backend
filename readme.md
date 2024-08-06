@@ -42,9 +42,22 @@
         - asyncHandler, ApiError, ApiResponse
 
 
-## Phase 4:
+## Phase 4: Creating User & Video Model
     - Creating User & Video Model
     - install packages
         - ###: npm i bcrypt jsonwebtoken
     - 
 > Explore Bcrypt , JWT(Bearer-Token) , MONGODB mongoose plugins & Hooks
+
+## Phase 5: File Uploading & Handling
+#### - File Upload - Firstly, Bring on local server, then from local server upload on cloudinary.
+    - install packages
+        - ###: npm i cloudinary
+        - ###: npm i multer
+
+    - Configure Cloudinary Uploadation function And Export it (So that can be used anytime & anywhere)
+
+    - Configure File Upload Middleware using multer
+        -  'Storage' methods - used as a middleware
+        - Route - file is coming/expected => use storage method
+        
