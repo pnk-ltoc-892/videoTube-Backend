@@ -19,6 +19,8 @@ const UploadOnCloudinary = async (localfilepath) => {
         // file has been uploaded succesfully
         console.log("File Uploaded Succesfully On Cloudinary");
         // console.log(uploadResponse.); log it and see 
+        
+        // ! Delete File After Succesfully uploaded
 
         return uploadResponse;
     } catch (error) {
@@ -27,7 +29,6 @@ const UploadOnCloudinary = async (localfilepath) => {
         return null;
         
         console.log(); // give a message
-        
     }
 }
 

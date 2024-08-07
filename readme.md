@@ -64,4 +64,6 @@
 ## Phase 6: Routes & Controllers
     - Basics Of How Structure Routes & Controllers
 
-    
+## Phase 7: Routes & Controllers
+    - User Registration Controller Function
+
