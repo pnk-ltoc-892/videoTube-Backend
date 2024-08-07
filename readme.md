@@ -60,4 +60,8 @@
     - Configure File Upload Middleware using multer
         -  'Storage' methods - used as a middleware
         - Route - file is coming/expected => use storage method
-        
+
+## Phase 6: Routes & Controllers
+    - Basics Of How Structure Routes & Controllers
+
+    

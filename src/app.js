@@ -30,6 +30,18 @@ app.use(express.static("public"))   // allow keeping assets
 app.use(cookieParser())
 
 
+// Routes - Import
+// userRouter is just router, imported with custom name
+import userRouter from './routes/user.routes.js'
+
+// Routes Declaration
+// app.use("Using middleware to bring routes")
+
+// Request At, "/api/v1/users/..." Redirected To userRouter
+app.use("/api/v1/users", userRouter)  // Middleware
+
+
+
 
 
 export { app }
