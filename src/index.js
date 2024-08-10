@@ -7,7 +7,7 @@ import connectDB from "./db/index.js";
 // Import app Instance of express
 import { app } from "./app.js";
 
-dotenv.config({path: './env'})
+dotenv.config({path: './.env'})
 
 // Connect To DB
 connectDB()

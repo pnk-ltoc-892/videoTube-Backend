@@ -58,7 +58,7 @@ const userSchema = new Schema(
 userSchema.pre("save", async function(next){    // execute before saving data Into DB
     // Only when passord is modified
     if(!this.isModified("password")) return next(); // negation check
-    // HAsh The Updated Pass
+    // Hash The Updated Password
     this.password = await bcrypt.hash(this.password, 10); // 10 - hash rounds
     next();       // await important 
 })  
@@ -83,9 +83,9 @@ userSchema.methods.generateAccessToken = function(){
         process.env.ACCESS_TOKEN_SECRET,
         {
             expiresIn: process.env.ACCESS_TOKEN_EXPIRY
-        }
-    )
-}
+        }   
+    )                   
+}               
 
 // Stored In Database, Holds Less Information
 userSchema.methods.generateRefreshToken = function(){

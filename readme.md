@@ -49,17 +49,18 @@
     - 
 > Explore Bcrypt , JWT(Bearer-Token) , MONGODB mongoose plugins & Hooks
 
+
 ## Phase 5: File Uploading & Handling
 #### - File Upload - Firstly, Bring on local server, then from local server upload on cloudinary.
     - install packages
         - ###: npm i cloudinary
         - ###: npm i multer
 
-    - Configure Cloudinary Uploadation function And Export it (So that can be used anytime & anywhere)
+    - Configure Cloudinary Upload function And Export it (So that can be used anytime & anywhere)
 
     - Configure File Upload Middleware using multer
-        -  'Storage' methods - used as a middleware
-        - Route - file is coming/expected => use storage method
+        - 'Storage' methods - used as a middleware
+        - Route Where, file is coming/expected => use storage method
 
 ## Phase 6: Routes & Controllers
     - Basics Of How Structure Routes & Controllers
