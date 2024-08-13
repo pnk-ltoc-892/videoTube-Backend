@@ -3,9 +3,31 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js"
 import { UploadOnCloudinary } from "../service/cloudinary.js"
+import jwt from "jsonwebtoken"
 
 
+// Custom Internal Methods
+const generateAccessAndRefreshTokens = async (userid) => {
+    try {
+        const user = await User.findById(userid)
 
+        const accessToken = await user.generateAccessToken()
+        const refreshToken = await user.generateRefreshToken()
+
+        // refreshToken, Put Into Db Object
+        user.refreshToken = refreshToken
+
+        // Save Object In MongoDB, Without Any Validation
+        await user.save({validateBeforeSave: false})
+
+        return {accessToken, refreshToken}
+    } 
+    catch (error) {
+        throw new ApiError(500, "Error while generating Access and Refresh Tokens")        
+    }
+}
+
+// Controller Functions
 const registerUser = asyncHandler( async (req, res) => {
     // get user details from frontend
     // validation - not empty
@@ -86,8 +108,177 @@ const registerUser = asyncHandler( async (req, res) => {
 } )
 
 
+const loginUser = asyncHandler( async (req, res) => {
+
+    const {email, username, password} = req.body
+    if(!username && !email){
+        throw new ApiError(400, "username or password is required")
+    }
+
+    const user = await User.findOne({
+        $or: [{username}, {email}]
+    })
+    if(!user){
+        throw new ApiError(404, "user does not exist")
+    }
+
+    // User & user(Instance) are different,   "user.methods"
+    const isPasswordCorrect = await user.isPasswordCorrect(password)
+    if(!isPasswordCorrect){
+        throw new ApiError(401, "password is Incorrect")
+    }
+
+    // Generate Token For Authentication
+    const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user._id)
+
+    // user instance here, and one created in function are different...
+    // GET latest DB instance of user OR update "user" Object here Only
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+
+    // send Token in cookies
+    const options = {
+        // Cookies Only server Modifiable
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+        new ApiResponse(
+            200,
+            {
+                user: loggedInUser,
+                accessToken,
+                refreshToken
+                // Sending Tokens to allow user to save Tokens on his SIde
+            },
+            "User Logged In Successfully"
+        )
+    )
+} )
+
+
+// Middleware Used Before, Although code can be witten here, but to imporve re-usability Use middleware
+const logoutUser = asyncHandler( async (req, res) => {
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                refreshToken: 1  // : 1, this removes the field from document
+            }
+        },
+        {
+            new: true // updateEntry : refreshToken: undefined
+        }
+    )
+    const options = {
+        // Only server
+        httpOnly: true,
+        secure: true
+    }
+    return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User loggedOut Successfully"))
+
+} )
+
+
+const refreshAccessToken = asyncHandler( async (req, res) => {
+    const incomingRefreshToken = req.cookies.refreshToken || req.cookies.body
+
+    if(!incomingRefreshToken){
+        throw new ApiError(401, "Unauthorized request")
+    }
+// try-catch ????
+    try {
+        const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET)
+        
+        const user = await User.findById(decodedToken._id)
+        if(!user){
+            throw new ApiError(401, "Invalid Refresh Token")
+        }
+    
+        // Matching userGiven & DB stored token
+        if(incomingRefreshToken !== user?.refreshToken){
+            throw new ApiError(401, "Refresh Token is used or expired")
+        }
+    
+        // Generate Fresh Token For Authentication
+        const {accessToken, newRefreshToken} = await generateAccessAndRefreshTokens(user._id)
+    
+        const options = {
+            // Only server
+            httpOnly: true,
+            secure: true
+        }
+    
+        return res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", newRefreshToken, options)
+        .json(
+            new ApiResponse(
+                200,
+                {
+                    accessToken,
+                    refreshToken: newRefreshToken
+                    // Sending Tokens to allow user to save Tokens on his SIde
+                },
+                "Access Token Refreshed"
+            )
+        )
+    } catch (error) {
+        throw new ApiError(401, "Invalid Refresh Token")
+    }
+} )
+
+const 
+
 
 
 export {
-    registerUser
+    registerUser,
+    loginUser,
+    logoutUser,
+    refreshAccessToken
 }
+
+
+
+
+
+
+/*
+Notes:-
+    - 1.Register User
+        - get user details form frontend(POST-MAN)
+        - input validation - not empty
+        - check if user already exists: username / email
+        - check for images , check for avatar
+        - upload them to cloudinary, check for avatar uploadation
+        - create user object (for mongoDb) - create entry in db
+        - remove password and refresh token field from response
+        - check for user creation
+        - return response
+
+    - 2.Login User
+        - get user details form frontend(POST-MAN)
+        - username / email
+        - check if user exists: username / email
+        - check for password
+        - access and refresh token
+        - send cookies token
+        - login success response
+
+
+    - 3.LogOut User
+        - 
+    - 4.Refresh Access Token
+        - get existing refersh token
+ */
+        // DONE

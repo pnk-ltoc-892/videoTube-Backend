@@ -63,8 +63,10 @@
         - Route Where, file is coming/expected => use storage method
 
 ## Phase 6: Routes & Controllers
-    - Basics Of How Structure Routes & Controllers
+    - Basics Of How To Structure Routes & Controllers
 
 ## Phase 7: Routes & Controllers
     - User Registration Controller Function
+
+## Phase 8: 
 
