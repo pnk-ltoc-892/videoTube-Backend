@@ -1,10 +1,17 @@
 import { Router } from "express";
 import {
+        changeCurrentPassword,
+        getCurrentUser,
         loginUser,
         logoutUser, 
         refreshAccessToken, 
-        registerUser 
-        } from "../controllers/user.controller.js";
+        registerUser, 
+        updateAccountDetails,
+        updateUserAvatar,
+        updateUsercoverImage
+        } 
+        from "../controllers/user.controller.js";
+
 import { verifyJWT } from "../middlewares/Auth.middleware.js";
 
 import { upload } from "../middlewares/multer.middleware.js"
@@ -30,10 +37,32 @@ router.route("/register").post(
 
 router.route("/login").post(loginUser);
 
-// Secured Route
+// ! Secured Routes
 router.route("/logout").post(verifyJWT, logoutUser);
 
 router.route("/refresh-token").post(refreshAccessToken); // verifyJWT - not needed ???
+
+router.route("/get-user").get(verifyJWT, getCurrentUser); // verifyJWT - not needed ???
+
+// ? Verify JWT Route??
+
+// * Updation-Routes
+router.route("/change-password").post(verifyJWT, changeCurrentPassword);
+
+router.route("/update-details").post(verifyJWT, updateAccountDetails);
+
+// File Upload Routes
+router.route("/update-avatar").post(
+    verifyJWT,
+    upload.single('avatar'),
+    updateUserAvatar
+);
+
+router.route("/update-coverimage").post(
+    verifyJWT,
+    upload.single('coverimage'),
+    updateUsercoverImage
+);
 
 
 

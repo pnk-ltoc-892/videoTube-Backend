@@ -55,6 +55,7 @@ const userSchema = new Schema(
 // 1. Normal fn (has this. CONTEXT access) | Arrow-Fn () => {} no context reference
 // 2. "save" - event
 // 3. 'this.SOMETHING' - has access to all User Fields
+
 userSchema.pre("save", async function(next){    // execute before saving data Into DB
     // Only when passord is modified
     if(!this.isModified("password")) return next(); // negation check

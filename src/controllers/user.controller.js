@@ -27,18 +27,9 @@ const generateAccessAndRefreshTokens = async (userid) => {
     }
 }
 
-// Controller Functions
-const registerUser = asyncHandler( async (req, res) => {
-    // get user details from frontend
-    // validation - not empty
-    // check if user already exists: username, email
-    // check for images, check for avatar
-    // upload them to cloudinary, avatar
-    // create user object - create entry in db
-    // remove password and refresh token field from response
-    // check for user creation
-    // return res
 
+// ! User-Controller Functions
+const registerUser = asyncHandler( async (req, res) => {
     // Data Extraction
     const {fullname, email, username, password } = req.body
     
@@ -240,6 +231,8 @@ const refreshAccessToken = asyncHandler( async (req, res) => {
 
 const getCurrentUser = asyncHandler( async (req, res) => {
     // ! RETURN COMPLETE PROFILE WITH SUBCRIBERS & ALL OTHER INFO
+    // console.log(req.user);
+    
     return res
         .status(200)
         .json(new ApiResponse(200, req.user, "Current User Fetched Succesfully"))
@@ -253,8 +246,8 @@ const changeCurrentPassword = asyncHandler( async (req, res) => {
     
     const user = await User.findById(req.user?._id)
     
-    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
-    if(!isPasswordCorrect){
+    const ispasswordCorrect = await user.isPasswordCorrect(oldPassword)
+    if(!ispasswordCorrect){
         throw new ApiError(400, "Invalid Password")
     }
 
@@ -290,9 +283,14 @@ const updateAccountDetails = asyncHandler( async (req, res) => {
         .json(new ApiResponse(200, user, "Fullname & Email Changed Succesfully"))
 } )
 
+
 // * Separate Routes For Files Updation
 const updateUserAvatar = asyncHandler( async (req, res) => {
     const avatarLocalPath = req.file?.path
+
+    // console.log("req.file: ", req.file);
+    
+
     if(!avatarLocalPath){
         throw new ApiError(400, "Avatar file missing")
     }
