@@ -66,7 +66,17 @@
     - Basics Of How To Structure Routes & Controllers
 
 ## Phase 7: Routes & Controllers
-    - User Registration Controller Function
+    - User Registration Controller Functions & Routes
 
 ## Phase 8: 
+    - User Details Updation Controller Functions & Routes
+
+## Phase 9:
+    - Currently Skipping Aggrations Pipelines
+
+## Phase 10:
+    - Add Remainig Models, Template Controllers
+
+
+
 
