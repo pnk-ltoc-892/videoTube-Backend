@@ -33,6 +33,8 @@ app.use(cookieParser())
 // Routes - Import
 // userRouter is just router, imported with custom name
 import userRouter from './routes/user.routes.js'
+import tweetRouter from './routes/tweet.routes.js'
+import commentRouter from './routes/comment.routes.js'
 
 // Routes Declaration
 // app.use("Using middleware to bring routes")
@@ -41,6 +43,11 @@ import userRouter from './routes/user.routes.js'
 app.use("/api/v1/users", userRouter)  // Middleware
 
 
+// Tweet Routes
+app.use("/api/v1/tweets", tweetRouter)  
+
+// Comment Routes
+app.use("/api/v1/comments", commentRouter)
 
 
 
