@@ -344,6 +344,86 @@ const updateUsercoverImage = asyncHandler( async (req, res) => {
 
 
 
+// ! Aggregation Code
+
+const getUserChannelProfile = asyncHandler( async (req, res) => {
+    const {username} = req.params
+    if(!username?.trim()){
+        throw new ApiError(400, "username is missing")
+    }
+
+    // log channel and analyze how data is returned back in aggregation (aggregate)
+    const channelProfile = await User.aggregate(
+        [
+            {
+                $match: {
+                    username: username?.toLowerCase()
+                }
+            },
+            {
+                $lookup: {
+                    from: "subscriptions",
+                    localField: "_id",
+                    foreignField: "channel",
+                    as: "subscribers"
+                }
+            },
+            {
+                $lookup: {
+                    from: "subscriptions",
+                    localField: "_id",
+                    foreignField: "subscriber",
+                    as: "subscribedTo"
+                }
+            },
+            {
+                $addFields: {
+                    channelSubscribersCount: {
+                        $size: "$subscribers"
+                    },
+                    channelsSubscribedToCount: {
+                        $size: "$subscribedTo"
+                    },
+                    isSubscribed: {
+                        $cond: {
+                            if: {//     field     in    document(Array or Object)
+                                $in: [req.user?._id, "$subscribers.subscriber"]
+                            },
+                            then: true,
+                            else: false
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    fullname: 1,
+                    username: 1,
+                    avatar: 1,
+                    email: 1,
+                    coverImage: 1,
+
+                    channelSubscribersCount: 1,
+                    channelsSubscribedToCount: 1,
+                    isSubscribed: 1
+                }
+            }
+        ]
+    )
+    if(!channelProfile?.length){
+        throw new ApiError(404, "Channel does not exist")
+    }
+    // Analyze this Array
+    // console.log(channelProfile);
+
+    return res
+            .status(200)
+            .json(new ApiResponse(200, channelProfile[0], "Channel Profile fetched succesfully"))
+
+} )
+
+
+
 
 
 
@@ -357,7 +437,9 @@ export {
     changeCurrentPassword,
     updateAccountDetails,
     updateUserAvatar,
-    updateUsercoverImage
+    updateUsercoverImage,
+
+    getUserChannelProfile
 }
 
 
