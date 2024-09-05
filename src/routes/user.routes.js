@@ -2,6 +2,8 @@ import { Router } from "express";
 import {
         changeCurrentPassword,
         getCurrentUser,
+        getUserChannelProfile,
+        getUserWatchHistory,
         loginUser,
         logoutUser, 
         refreshAccessToken, 
@@ -49,20 +51,27 @@ router.route("/get-user").get(verifyJWT, getCurrentUser); // verifyJWT - not nee
 // * Updation-Routes
 router.route("/change-password").post(verifyJWT, changeCurrentPassword);
 
-router.route("/update-details").post(verifyJWT, updateAccountDetails);
+router.route("/update-details").patch(verifyJWT, updateAccountDetails);
 
 // File Upload Routes
-router.route("/update-avatar").post(
+router.route("/update-avatar").patch(
     verifyJWT,
     upload.single('avatar'),
     updateUserAvatar
 );
 
-router.route("/update-coverimage").post(
+router.route("/update-coverimage").patch(
     verifyJWT,
     upload.single('coverimage'),
     updateUsercoverImage
 );
+
+
+// Aggegation routes
+
+router.route("/channel/:username").get(verifyJWT, getUserChannelProfile)
+
+router.route("/watch-history").get(verifyJWT, getUserWatchHistory)
 
 
 
