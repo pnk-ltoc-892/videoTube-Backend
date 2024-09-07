@@ -22,13 +22,25 @@ const videoSchema = new Schema(
         },
         description: {
             type: String,
-            required: true,
+            default: "",
         },
         duration: {     // From cloudinary after uploading video Explore It...
             type: Number,
             required: true,
         },
         views: {
+            type: Number,
+            default: 0,
+        },
+        likes: {
+            type: Number,
+            default: 0,
+        },
+        dislikes: {
+            type: Number,
+            default: 0,
+        },
+        comments: {
             type: Number,
             default: 0,
         },

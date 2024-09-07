@@ -29,7 +29,7 @@ router.route("/v/:videoId").get(getVideoById)
 
 
 // ! Get All Videos Uploaded By Current User
-router.route("/v/user").get(verifyJWT, getUserVideos)
+router.route("/v/user/videos").get(verifyJWT, getUserVideos)
 
 
 // ! Upload a Video
@@ -51,7 +51,7 @@ router.route("/v/user/upload").post(
 )
 
 
-// ! Delete a Video, Only Uploaded By The Current User
+// ! Delete a Video, "Only Uploaded By The Current User" - Current User === Video Owner
 router.route("/v/user/:videoId").delete(verifyJWT, deleteVideo)
 
 

@@ -45,7 +45,7 @@ const registerUser = asyncHandler( async (req, res) => {
         $or: [{ username }, { email }]
     })
     // const existedUser = await User.find({ username })
-
+    
     if (existedUser) {
         throw new ApiError(409, "User with email or username already exists")
     }
@@ -53,18 +53,21 @@ const registerUser = asyncHandler( async (req, res) => {
 
     //console.log(req.files); // Explore files
 
-    const avatarLocalPath = req.files?.avatar[0]?.path;
+    // const avatarLocalPath = req.files?.avatar[0]?.path;
     //const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
     // Note: Files has been uploaded on Our Local Server By Multer, and has added its access in req.files
 
 
+    let avatarLocalPath;
+    if (req.files && Array.isArray(req.files.avatar) && req.files.avatar.length > 0) {
+        avatarLocalPath = req.files.avatar[0].path
+    }
     let coverImageLocalPath;
     if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
         coverImageLocalPath = req.files.coverImage[0].path
     }
     
-
     if (!avatarLocalPath) {
         throw new ApiError(400, "Avatar file is required")
     }
